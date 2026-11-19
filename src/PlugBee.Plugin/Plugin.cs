@@ -129,7 +129,7 @@ namespace MusicBeePlugin
                     return _cachedArtwork;
 
                 _lastArtworkUrl = fileUrl;
-                PlugBee.Models.PictureLocations locations;
+                PictureLocations locations;
                 string pictureUrl;
                 byte[] imageData;
                 bool found = _musicBee.Library_GetArtworkEx(
