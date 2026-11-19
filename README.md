@@ -9,7 +9,7 @@ Ampliar MusicBee sin reemplazar su motor de reproducción. El plugin se comunica
 ## Funcionalidades planeadas
 
 - Panel de reproducción y controles.
-- Biblioteca musical con búsqueda y filtros.
+- Biblioteca musical con búsqueda por canción, artista y álbum; reproducción directa de resultados.
 - Visualizador de audio.
 - Letras sincronizadas.
 - Herramientas de ecualización.
@@ -19,7 +19,7 @@ Ampliar MusicBee sin reemplazar su motor de reproducción. El plugin se comunica
 
 ## Estado actual
 
-**Fase 1 — Primera implementación.** Ya están en el repositorio la estructura de Visual Studio, la interfaz oficial de la API, el registro del plugin, una ventana WPF oscura y controles para consultar la canción actual y manejar reproducción. Falta compilar y probar en la instalación Store de MusicBee 3.7.9796.
+**Fase 1 — Primera implementación.** Ya están en el repositorio la estructura de Visual Studio, la interfaz oficial de la API, el registro del plugin, una ventana WPF oscura, controles de reproducción y una ventana de biblioteca con búsqueda por título, artista y álbum y reproducción directa. La compilación automática está en validación; falta probar en MusicBee 3.7.9796 Store.
 
 ## Requisitos de desarrollo
 
