@@ -10,18 +10,21 @@ namespace PlugBee.Views
         private readonly Action _playPause;
         private readonly Action _previousTrack;
         private readonly Action _nextTrack;
+        private readonly Action _openLibrary;
 
         public MainWindow(
             Func<TrackSnapshot> readCurrentTrack,
             Action playPause,
             Action previousTrack,
-            Action nextTrack)
+            Action nextTrack,
+            Action openLibrary)
         {
             InitializeComponent();
             _readCurrentTrack = readCurrentTrack;
             _playPause = playPause;
             _previousTrack = previousTrack;
             _nextTrack = nextTrack;
+            _openLibrary = openLibrary;
             RefreshTrackInfo();
         }
 
@@ -53,6 +56,11 @@ namespace PlugBee.Views
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             _nextTrack?.Invoke();
+        }
+
+        private void Library_Click(object sender, RoutedEventArgs e)
+        {
+            _openLibrary?.Invoke();
         }
     }
 }
