@@ -1,0 +1,180 @@
+<Window x:Class="PlugBee.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Plug-Bee" Height="760" Width="1180"
+        MinHeight="650" MinWidth="960"
+        WindowStartupLocation="CenterScreen"
+        Background="#121212" Foreground="#F5F5F5">
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBrush" Color="#181818" />
+        <SolidColorBrush x:Key="MutedBrush" Color="#A7A7A7" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#1ED760" />
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#B3B3B3" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="14,11" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style x:Key="RoundButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="Background" Value="#282828" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Width" Value="42" />
+            <Setter Property="Height" Value="42" />
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Margin" Value="6,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="94" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="224" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#090909" Padding="20,24">
+                <DockPanel LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top">
+                        <StackPanel Orientation="Horizontal" Margin="4,0,0,32">
+                            <Border Width="34" Height="34" CornerRadius="10" Background="#1ED760" VerticalAlignment="Center">
+                                <TextBlock Text="♫" Foreground="#07140B" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="plug-bee" FontSize="23" FontWeight="Bold" Margin="11,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="MENÚ" Foreground="#777777" FontSize="10" FontWeight="Bold" Margin="12,0,0,9" />
+                        <Button Style="{StaticResource NavButton}" Content="⌂   Inicio" Foreground="#FFFFFF" />
+                        <Button Style="{StaticResource NavButton}" Content="▤   Tu biblioteca" />
+                        <Button Style="{StaticResource NavButton}" Content="◷   Escuchado recientemente" />
+                        <Button Style="{StaticResource NavButton}" Content="✦   Descubrir" />
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Bottom" Margin="0,24,0,0">
+                        <Border Height="1" Background="#292929" Margin="0,0,0,16" />
+                        <TextBlock Text="PLUG-BEE  ·  0.1.0" Foreground="#666666" FontSize="10" Margin="12,0,0,4" />
+                        <TextBlock Text="Conectado a MusicBee" Foreground="#8A8A8A" FontSize="11" Margin="12,0,0,0" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="30,24,30,26">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" Margin="0,0,0,28">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Border Background="#242424" CornerRadius="16" Padding="12,7">
+                            <TextBlock Text="●  MusicBee" Foreground="#D7D7D7" FontSize="11" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="TU ESPACIO MUSICAL" Foreground="#8D8D8D" FontSize="10" FontWeight="Bold" />
+                        <TextBlock Text="Buenas noches" FontSize="30" FontWeight="Bold" Margin="0,5,0,0" />
+                    </StackPanel>
+                </DockPanel>
+
+                <Grid Grid.Row="1" Margin="0,0,0,22">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <ColumnDefinition Width="18" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="#202020" CornerRadius="14" Padding="22">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="142" Height="142" CornerRadius="9" Background="#303030" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Grid>
+                                    <TextBlock Text="♫" FontSize="72" Foreground="#1ED760" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="18,0,0,0">
+                                <TextBlock Text="REPRODUCIENDO AHORA" Foreground="#1ED760" FontSize="10" FontWeight="Bold" />
+                                <TextBlock x:Name="SongTitle" Text="Nada se está reproduciendo" FontSize="23" FontWeight="Bold" TextWrapping="Wrap" Margin="0,10,0,4" />
+                                <TextBlock x:Name="SongArtist" Text="Selecciona una canción en MusicBee" Foreground="#C3C3C3" FontSize="14" />
+                                <TextBlock x:Name="SongAlbum" Text="" Foreground="#858585" FontSize="12" Margin="0,5,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="2" Background="#1B1B1B" CornerRadius="14" Padding="20">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="TU BIBLIOTECA" Foreground="#8B8B8B" FontSize="10" FontWeight="Bold" />
+                            <TextBlock Text="Toda tu música,\nen un solo lugar." FontSize="21" FontWeight="SemiBold" Margin="0,12,0,8" />
+                            <TextBlock Text="La búsqueda, los filtros y las colecciones llegarán en la siguiente etapa." Foreground="#A5A5A5" TextWrapping="Wrap" FontSize="12" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <DockPanel Margin="0,0,0,14">
+                        <TextBlock Text="Tu centro de música" FontSize="19" FontWeight="Bold" />
+                        <TextBlock DockPanel.Dock="Right" Text="PRIMERA VERSIÓN" Foreground="#777777" FontSize="10" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <UniformGrid Grid.Row="1" Columns="3" Rows="1">
+                        <Border Background="#1D1D1D" CornerRadius="12" Margin="0,0,10,0" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="◉" Foreground="#1ED760" FontSize="24" />
+                                <TextBlock Text="Visualizador" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,5" />
+                                <TextBlock Text="Preparando acceso a los datos de audio de MusicBee." Foreground="#999999" FontSize="12" TextWrapping="Wrap" />
+                                <TextBlock Text="EN DESARROLLO" Foreground="#1ED760" FontSize="9" FontWeight="Bold" Margin="0,14,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#1D1D1D" CornerRadius="12" Margin="5,0" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="≋" Foreground="#1ED760" FontSize="24" />
+                                <TextBlock Text="Letras" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,5" />
+                                <TextBlock Text="Panel para letras y sincronización por tiempo." Foreground="#999999" FontSize="12" TextWrapping="Wrap" />
+                                <TextBlock Text="EN DESARROLLO" Foreground="#1ED760" FontSize="9" FontWeight="Bold" Margin="0,14,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#1D1D1D" CornerRadius="12" Margin="10,0,0,0" Padding="18">
+                            <StackPanel>
+                                <TextBlock Text="✧" Foreground="#1ED760" FontSize="24" />
+                                <TextBlock Text="Descubrimiento" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,5" />
+                                <TextBlock Text="Recomendaciones calculadas a partir de tu biblioteca." Foreground="#999999" FontSize="12" TextWrapping="Wrap" />
+                                <TextBlock Text="EN DESARROLLO" Foreground="#1ED760" FontSize="9" FontWeight="Bold" Margin="0,14,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="1" Background="#181818" BorderBrush="#303030" BorderThickness="0,1,0,0" Padding="26,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock x:Name="PlayerTitle" Text="Sin reproducción" FontWeight="SemiBold" FontSize="12" />
+                    <TextBlock x:Name="PlayerArtist" Text="MusicBee está listo" Foreground="#A0A0A0" FontSize="11" Margin="0,3,0,0" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource RoundButton}" Content="|◀" Click="Previous_Click" />
+                    <Button x:Name="PlayPauseButton" Width="48" Height="48" Background="#1ED760" Foreground="#07140B" BorderThickness="0" FontSize="19" FontWeight="Bold" Content="▶" Cursor="Hand" Click="PlayPause_Click" />
+                    <Button Style="{StaticResource RoundButton}" Content="▶|" Click="Next_Click" />
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="La reproducción sigue a cargo de MusicBee" Foreground="#777777" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
