@@ -14,6 +14,8 @@ namespace MusicBeePlugin
         private MainWindow _window;
         private LibraryWindow _libraryWindow;
         private bool _apiReady;
+        private string _lastArtworkUrl;
+        private byte[] _cachedArtwork;
 
         public PluginInfo Initialise(IntPtr apiInterfacePtr)
         {
@@ -106,8 +108,43 @@ namespace MusicBeePlugin
                 Title = SafeTag(MetaDataType.TrackTitle),
                 Artist = SafeTag(MetaDataType.Artist),
                 Album = SafeTag(MetaDataType.Album),
-                IsPlaying = _musicBee.Player_GetPlayState() == PlayState.Playing
+                IsPlaying = _musicBee.Player_GetPlayState() == PlayState.Playing,
+                ArtworkData = ReadCurrentArtwork()
             };
+        }
+
+        private byte[] ReadCurrentArtwork()
+        {
+            try
+            {
+                string fileUrl = _musicBee.NowPlaying_GetFileUrl();
+                if (string.IsNullOrWhiteSpace(fileUrl))
+                {
+                    _lastArtworkUrl = null;
+                    _cachedArtwork = null;
+                    return null;
+                }
+
+                if (string.Equals(fileUrl, _lastArtworkUrl, StringComparison.OrdinalIgnoreCase))
+                    return _cachedArtwork;
+
+                _lastArtworkUrl = fileUrl;
+                PlugBee.Models.PictureLocations locations;
+                string pictureUrl;
+                byte[] imageData;
+                bool found = _musicBee.Library_GetArtworkEx(
+                    fileUrl, 0, true, out locations, out pictureUrl, out imageData);
+
+                _cachedArtwork = found && imageData != null && imageData.Length > 0
+                    ? imageData
+                    : null;
+
+                return _cachedArtwork;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private string SafeTag(MetaDataType tag)
