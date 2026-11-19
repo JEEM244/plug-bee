@@ -1,0 +1,35 @@
+name: Build Plug-Bee
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build x86 Release
+        run: msbuild PlugBee.sln /m /p:Configuration=Release /p:Platform=x86
+
+      - name: Package plugin
+        shell: pwsh
+        run: |
+          if (!(Test-Path "artifacts/MB_PlugBee.dll")) {
+            throw "No se encontró artifacts/MB_PlugBee.dll después de compilar."
+          }
+          Compress-Archive -Path "artifacts/MB_PlugBee.dll" -DestinationPath "artifacts/Plug-Bee.zip" -Force
+
+      - name: Upload plugin package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Plug-Bee
+          path: artifacts/Plug-Bee.zip
