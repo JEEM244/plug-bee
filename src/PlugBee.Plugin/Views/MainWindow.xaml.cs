@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 using PlugBee.Models;
 
 namespace PlugBee.Views
@@ -13,13 +16,17 @@ namespace PlugBee.Views
         private readonly Action _previousTrack;
         private readonly Action _nextTrack;
         private readonly Action _openLibrary;
+        private readonly Func<float[]> _readSpectrum;
+        private readonly DispatcherTimer _spectrumTimer;
+        private readonly Rectangle[] _spectrumBars = new Rectangle[32];
 
         public MainWindow(
             Func<TrackSnapshot> readCurrentTrack,
             Action playPause,
             Action previousTrack,
             Action nextTrack,
-            Action openLibrary)
+            Action openLibrary,
+            Func<float[]> readSpectrum)
         {
             InitializeComponent();
             _readCurrentTrack = readCurrentTrack;
@@ -27,6 +34,12 @@ namespace PlugBee.Views
             _previousTrack = previousTrack;
             _nextTrack = nextTrack;
             _openLibrary = openLibrary;
+            _readSpectrum = readSpectrum;
+            CreateSpectrumBars();
+            _spectrumTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+            _spectrumTimer.Tick += (sender, args) => UpdateSpectrum();
+            _spectrumTimer.Start();
+            Closed += (sender, args) => _spectrumTimer.Stop();
             RefreshTrackInfo();
         }
 
@@ -43,6 +56,64 @@ namespace PlugBee.Views
             PlayerArtist.Text = artist;
             PlayPauseButton.Content = track.IsPlaying ? "Ⅱ" : "▶";
             UpdateArtwork(track.ArtworkData);
+        }
+
+
+        private void CreateSpectrumBars()
+        {
+            for (int i = 0; i < _spectrumBars.Length; i++)
+            {
+                Rectangle bar = new Rectangle
+                {
+                    Fill = new SolidColorBrush(Color.FromRgb(30, 215, 96)),
+                    RadiusX = 2,
+                    RadiusY = 2,
+                    Height = 4
+                };
+                _spectrumBars[i] = bar;
+                SpectrumCanvas.Children.Add(bar);
+            }
+            SpectrumCanvas.SizeChanged += (sender, args) => UpdateSpectrumLayout();
+            UpdateSpectrumLayout();
+        }
+
+        private void UpdateSpectrum()
+        {
+            float[] values = _readSpectrum?.Invoke();
+            if (values == null || values.Length == 0)
+            {
+                foreach (Rectangle bar in _spectrumBars)
+                    bar.Height = 3;
+                return;
+            }
+
+            double width = SpectrumCanvas.ActualWidth;
+            double height = SpectrumCanvas.ActualHeight;
+            if (width <= 0 || height <= 0) return;
+
+            double slot = width / _spectrumBars.Length;
+            for (int i = 0; i < _spectrumBars.Length; i++)
+            {
+                int sample = Math.Min(values.Length - 1, (int)((double)i / _spectrumBars.Length * values.Length));
+                double level = Math.Max(0, Math.Min(1, values[sample]));
+                double barHeight = Math.Max(3, level * (height - 4));
+                Rectangle bar = _spectrumBars[i];
+                bar.Width = Math.Max(2, slot - 3);
+                bar.Height = barHeight;
+                Canvas.SetLeft(bar, i * slot + 1);
+                Canvas.SetTop(bar, height - barHeight);
+            }
+        }
+
+        private void UpdateSpectrumLayout()
+        {
+            if (_spectrumBars[0] == null) return;
+            double slot = SpectrumCanvas.ActualWidth / _spectrumBars.Length;
+            for (int i = 0; i < _spectrumBars.Length; i++)
+            {
+                _spectrumBars[i].Width = Math.Max(2, slot - 3);
+                Canvas.SetLeft(_spectrumBars[i], i * slot + 1);
+            }
         }
 
         private void UpdateArtwork(byte[] artworkData)
