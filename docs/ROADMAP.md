@@ -11,8 +11,10 @@
 
 ## Etapa 2 — Biblioteca
 
-- [ ] Consultar canciones de la biblioteca mediante la API.
-- [ ] Búsqueda, ordenamiento y filtros.
+- [x] Consultar canciones de la biblioteca mediante Library_QueryFilesEx.
+- [x] Búsqueda por título, artista y álbum.
+- [x] Reproducir un resultado desde Plug-Bee.
+- [ ] Ordenamiento y filtros avanzados.
 - [ ] Vistas de álbumes, artistas y listas.
 - [ ] Portadas desde la API de MusicBee.
 
