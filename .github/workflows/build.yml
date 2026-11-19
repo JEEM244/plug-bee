@@ -17,8 +17,11 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Restore NuGet packages
+        run: msbuild PlugBee.sln /t:Restore /p:Configuration=Release /p:Platform=x86
+
       - name: Build x86 Release
-        run: msbuild PlugBee.sln /m /p:Configuration=Release /p:Platform=x86
+        run: msbuild PlugBee.sln /m /p:Configuration=Release /p:Platform=x86 /p:RestoreIgnoreFailedSources=true
 
       - name: Package plugin
         shell: pwsh
