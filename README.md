@@ -19,7 +19,7 @@ Ampliar MusicBee sin reemplazar su motor de reproducción. El plugin se comunica
 
 ## Estado actual
 
-**Fase 0 — Base del proyecto.** Se está preparando la estructura del plugin, la conexión con MusicBee y la primera ventana de reproducción. Las funciones que requieren acceso especial al flujo de audio se validarán por separado antes de prometer compatibilidad.
+**Fase 1 — Primera implementación.** Ya están en el repositorio la estructura de Visual Studio, la interfaz oficial de la API, el registro del plugin, una ventana WPF oscura y controles para consultar la canción actual y manejar reproducción. Falta compilar y probar en la instalación Store de MusicBee 3.7.9796.
 
 ## Requisitos de desarrollo
 
