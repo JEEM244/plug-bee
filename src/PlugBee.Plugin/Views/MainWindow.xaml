@@ -53,7 +53,7 @@
                         </StackPanel>
                         <TextBlock Text="MENÚ" Foreground="#777777" FontSize="10" FontWeight="Bold" Margin="12,0,0,9" />
                         <Button Style="{StaticResource NavButton}" Content="⌂   Inicio" Foreground="#FFFFFF" />
-                        <Button Style="{StaticResource NavButton}" Content="▤   Tu biblioteca" />
+                        <Button Style="{StaticResource NavButton}" Content="▤   Tu biblioteca" Click="Library_Click" />
                         <Button Style="{StaticResource NavButton}" Content="◷   Escuchado recientemente" />
                         <Button Style="{StaticResource NavButton}" Content="✦   Descubrir" />
                     </StackPanel>
