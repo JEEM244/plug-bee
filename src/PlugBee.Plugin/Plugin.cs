@@ -49,7 +49,7 @@ namespace MusicBeePlugin
         {
             if (_window == null)
             {
-                _window = new MainWindow(ReadCurrentTrack, PlayPause, PreviousTrack, NextTrack, OpenLibrary);
+                _window = new MainWindow(ReadCurrentTrack, PlayPause, PreviousTrack, NextTrack, OpenLibrary, ReadSpectrum);
                 _window.Closed += (sender, args) => _window = null;
                 _window.Show();
             }
@@ -140,6 +140,29 @@ namespace MusicBeePlugin
                     : null;
 
                 return _cachedArtwork;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
+        private float[] ReadSpectrum()
+        {
+            if (!_apiReady || _musicBee.Player_GetPlayState() != PlayState.Playing)
+                return null;
+
+            try
+            {
+                float[] spectrum = new float[256];
+                int count = _musicBee.NowPlaying_GetSpectrumData(spectrum);
+                if (count <= 0) return null;
+                if (count == spectrum.Length) return spectrum;
+
+                float[] result = new float[Math.Min(count, spectrum.Length)];
+                Array.Copy(spectrum, result, result.Length);
+                return result;
             }
             catch
             {
