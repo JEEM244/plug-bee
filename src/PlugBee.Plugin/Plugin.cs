@@ -53,8 +53,8 @@ namespace MusicBeePlugin
             }
             else
             {
-                if (_window.WindowState == WindowState.Minimized)
-                    _window.WindowState = WindowState.Normal;
+                if (_window.WindowState == System.Windows.WindowState.Minimized)
+                    _window.WindowState = System.Windows.WindowState.Normal;
 
                 _window.Activate();
                 _window.RefreshTrackInfo();
