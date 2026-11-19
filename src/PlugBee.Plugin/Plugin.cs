@@ -11,6 +11,7 @@ namespace MusicBeePlugin
         private MusicBeeApiInterface _musicBee;
         private PluginInfo _pluginInfo;
         private MainWindow _window;
+        private LibraryWindow _libraryWindow;
         private bool _apiReady;
 
         public PluginInfo Initialise(IntPtr apiInterfacePtr)
@@ -45,7 +46,7 @@ namespace MusicBeePlugin
         {
             if (_window == null)
             {
-                _window = new MainWindow(ReadCurrentTrack, PlayPause, PreviousTrack, NextTrack);
+                _window = new MainWindow(ReadCurrentTrack, PlayPause, PreviousTrack, NextTrack, OpenLibrary);
                 _window.Closed += (sender, args) => _window = null;
                 _window.Show();
             }
@@ -68,6 +69,12 @@ namespace MusicBeePlugin
 
         public void Close(PluginCloseReason reason)
         {
+            if (_libraryWindow != null)
+            {
+                _libraryWindow.Close();
+                _libraryWindow = null;
+            }
+
             if (_window != null)
             {
                 _window.Close();
@@ -112,6 +119,86 @@ namespace MusicBeePlugin
             {
                 return string.Empty;
             }
+        }
+
+        private void OpenLibrary()
+        {
+            if (_libraryWindow == null)
+            {
+                _libraryWindow = new LibraryWindow(SearchLibrary, PlayLibraryTrack);
+                _libraryWindow.Owner = _window;
+                _libraryWindow.Closed += (sender, args) => _libraryWindow = null;
+                _libraryWindow.Show();
+            }
+            else
+            {
+                _libraryWindow.Activate();
+            }
+        }
+
+        private PlugBee.Models.LibraryTrack[] SearchLibrary(string searchText)
+        {
+            if (!_apiReady || string.IsNullOrWhiteSpace(searchText))
+                return new PlugBee.Models.LibraryTrack[0];
+
+            string query = BuildLibraryQuery(searchText);
+            string[] files;
+            bool found = _musicBee.Library_QueryFilesEx(query, out files);
+            if (!found || files == null)
+                return new PlugBee.Models.LibraryTrack[0];
+
+            return files
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .Take(250)
+                .Select(path => new PlugBee.Models.LibraryTrack
+                {
+                    FileUrl = path,
+                    Title = ReadLibraryTag(path, MetaDataType.TrackTitle),
+                    Artist = ReadLibraryTag(path, MetaDataType.Artist),
+                    Album = ReadLibraryTag(path, MetaDataType.Album)
+                })
+                .ToArray();
+        }
+
+        private static string BuildLibraryQuery(string searchText)
+        {
+            var conditions = new System.Xml.Linq.XElement("Conditions",
+                new System.Xml.Linq.XAttribute("CombineMethod", "Any"),
+                new System.Xml.Linq.XElement("Condition",
+                    new System.Xml.Linq.XAttribute("Field", "Title"),
+                    new System.Xml.Linq.XAttribute("Comparison", "Contains"),
+                    new System.Xml.Linq.XAttribute("Value", searchText)),
+                new System.Xml.Linq.XElement("Condition",
+                    new System.Xml.Linq.XAttribute("Field", "ArtistPeople"),
+                    new System.Xml.Linq.XAttribute("Comparison", "Contains"),
+                    new System.Xml.Linq.XAttribute("Value", searchText)),
+                new System.Xml.Linq.XElement("Condition",
+                    new System.Xml.Linq.XAttribute("Field", "Album"),
+                    new System.Xml.Linq.XAttribute("Comparison", "Contains"),
+                    new System.Xml.Linq.XAttribute("Value", searchText)));
+
+            return new System.Xml.Linq.XElement("SmartPlaylist",
+                new System.Xml.Linq.XElement("Source",
+                    new System.Xml.Linq.XAttribute("Type", "1"),
+                    conditions)).ToString(System.Xml.Linq.SaveOptions.DisableFormatting);
+        }
+
+        private string ReadLibraryTag(string fileUrl, MetaDataType tag)
+        {
+            try
+            {
+                return _musicBee.Library_GetFileTag(fileUrl, tag) ?? string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private void PlayLibraryTrack(string fileUrl)
+        {
+            if (_apiReady && !string.IsNullOrWhiteSpace(fileUrl))
+                _musicBee.NowPlayingList_PlayNow(fileUrl);
         }
 
         private void PlayPause()
