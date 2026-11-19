@@ -11,11 +11,13 @@ namespace MusicBeePlugin
         private MusicBeeApiInterface _musicBee;
         private PluginInfo _pluginInfo;
         private MainWindow _window;
+        private bool _apiReady;
 
         public PluginInfo Initialise(IntPtr apiInterfacePtr)
         {
             _musicBee = new MusicBeeApiInterface();
             _musicBee.Initialise(apiInterfacePtr);
+            _apiReady = true;
 
             _pluginInfo = new PluginInfo
             {
@@ -88,7 +90,7 @@ namespace MusicBeePlugin
 
         private TrackSnapshot ReadCurrentTrack()
         {
-            if (_musicBee == null)
+            if (!_apiReady)
                 return TrackSnapshot.Empty;
 
             return new TrackSnapshot
@@ -114,17 +116,17 @@ namespace MusicBeePlugin
 
         private void PlayPause()
         {
-            _musicBee?.Player_PlayPause();
+            _musicBee.Player_PlayPause();
         }
 
         private void PreviousTrack()
         {
-            _musicBee?.Player_PlayPreviousTrack();
+            _musicBee.Player_PlayPreviousTrack();
         }
 
         private void NextTrack()
         {
-            _musicBee?.Player_PlayNextTrack();
+            _musicBee.Player_PlayNextTrack();
         }
     }
 }
