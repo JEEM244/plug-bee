@@ -98,7 +98,8 @@
                             </Grid.ColumnDefinitions>
                             <Border Width="142" Height="142" CornerRadius="9" Background="#303030" HorizontalAlignment="Left" VerticalAlignment="Center">
                                 <Grid>
-                                    <TextBlock Text="♫" FontSize="72" Foreground="#1ED760" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="CoverFallback" Text="♫" FontSize="72" Foreground="#1ED760" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Image x:Name="AlbumCover" Stretch="UniformToFill" Visibility="Collapsed" />
                                 </Grid>
                             </Border>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="18,0,0,0">
