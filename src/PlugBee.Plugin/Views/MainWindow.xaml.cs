@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using PlugBee.Models;
 
 namespace PlugBee.Views
@@ -40,6 +42,41 @@ namespace PlugBee.Views
             PlayerTitle.Text = title;
             PlayerArtist.Text = artist;
             PlayPauseButton.Content = track.IsPlaying ? "Ⅱ" : "▶";
+            UpdateArtwork(track.ArtworkData);
+        }
+
+        private void UpdateArtwork(byte[] artworkData)
+        {
+            if (artworkData == null || artworkData.Length == 0)
+            {
+                AlbumCover.Source = null;
+                AlbumCover.Visibility = Visibility.Collapsed;
+                CoverFallback.Visibility = Visibility.Visible;
+                return;
+            }
+
+            try
+            {
+                BitmapImage image = new BitmapImage();
+                using (MemoryStream stream = new MemoryStream(artworkData))
+                {
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.StreamSource = stream;
+                    image.EndInit();
+                    image.Freeze();
+                }
+
+                AlbumCover.Source = image;
+                AlbumCover.Visibility = Visibility.Visible;
+                CoverFallback.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+                AlbumCover.Source = null;
+                AlbumCover.Visibility = Visibility.Collapsed;
+                CoverFallback.Visibility = Visibility.Visible;
+            }
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
