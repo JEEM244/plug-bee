@@ -14,5 +14,6 @@ namespace PlugBee.Models
         public string Artist { get; set; }
         public string Album { get; set; }
         public bool IsPlaying { get; set; }
+        public byte[] ArtworkData { get; set; }
     }
 }
