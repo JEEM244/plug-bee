@@ -133,8 +133,11 @@
                             <StackPanel>
                                 <TextBlock Text="◉" Foreground="#1ED760" FontSize="24" />
                                 <TextBlock Text="Visualizador" FontSize="16" FontWeight="SemiBold" Margin="0,12,0,5" />
-                                <TextBlock Text="Preparando acceso a los datos de audio de MusicBee." Foreground="#999999" FontSize="12" TextWrapping="Wrap" />
-                                <TextBlock Text="EN DESARROLLO" Foreground="#1ED760" FontSize="9" FontWeight="Bold" Margin="0,14,0,0" />
+                                <TextBlock Text="El sonido en tiempo real, convertido en movimiento." Foreground="#999999" FontSize="12" TextWrapping="Wrap" />
+                                <Border Background="#111111" CornerRadius="8" Height="92" Margin="0,12,0,0" Padding="8">
+                                    <Canvas x:Name="SpectrumCanvas" ClipToBounds="True" />
+                                </Border>
+                                <TextBlock Text="AUDIO EN TIEMPO REAL" Foreground="#1ED760" FontSize="9" FontWeight="Bold" Margin="0,10,0,0" />
                             </StackPanel>
                         </Border>
                         <Border Background="#1D1D1D" CornerRadius="12" Margin="5,0" Padding="18">
